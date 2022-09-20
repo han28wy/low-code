@@ -90,6 +90,9 @@ const currentComp = reactive({
   selectPart: markRaw(
     defineAsyncComponent(() => import("./components/selectPart.vue"))
   ),
+  buttonPart: markRaw(
+    defineAsyncComponent(() => import("./components/buttonPart.vue"))
+  ),
 });
 //拖拽开始的事件
 const onStart = () => {
@@ -167,6 +170,13 @@ var controlList = reactive([
   //   icon: "ios-images-outline",
   // },
   // { id: 10, name: "定位", type: "position", icon: "ios-pin-outline" },
+  {
+    id: 11,
+    name: "按钮",
+    type: "position",
+    icon: "ios-pin-outline",
+    comp: "buttonPart",
+  },
 ]);
 </script>
 
