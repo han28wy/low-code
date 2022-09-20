@@ -91,6 +91,9 @@ const editComp = reactive({
   inputEdit: markRaw(
     defineAsyncComponent(() => import("./editComponents/inputEdit.vue"))
   ),
+  buttonEdit: markRaw(
+    defineAsyncComponent(() => import("./editComponents/buttonEdit.vue"))
+  ),
 });
 
 const currentComp = reactive({
@@ -137,6 +140,7 @@ var arr2 = reactive([
     type: "radio",
     icon: "ios-radio-button-off",
     comp: "inputPart",
+    edit: "buttonEdit",
   },
 ]);
 var controlList = reactive([
@@ -146,6 +150,7 @@ var controlList = reactive([
     type: "radio",
     icon: "ios-radio-button-off",
     comp: "radioPart",
+    edit: "buttonEdit",
   },
   {
     id: 2,
@@ -153,6 +158,7 @@ var controlList = reactive([
     type: "checkbox",
     icon: "ios-checkbox-outline",
     comp: "selectPart",
+    edit: "buttonEdit",
   },
   {
     id: 3,
@@ -168,6 +174,7 @@ var controlList = reactive([
     type: "date",
     icon: "ios-calendar-outline",
     comp: "selectPart",
+    edit: "buttonEdit",
   },
   {
     id: 5,
@@ -175,6 +182,7 @@ var controlList = reactive([
     type: "mobile",
     icon: "ios-phone-portrait",
     comp: "selectPart",
+    edit: "buttonEdit",
   },
   {
     id: 6,
@@ -182,6 +190,7 @@ var controlList = reactive([
     type: "email",
     icon: "ios-mail-outline",
     comp: "selectPart",
+    edit: "buttonEdit",
   },
   // { id: 7, name: "地区", type: "address", icon: "ios-locate-outline" },
   // { id: 8, name: "性别", type: "gender", icon: "ios-male" },
@@ -198,6 +207,7 @@ var controlList = reactive([
     type: "position",
     icon: "ios-pin-outline",
     comp: "buttonPart",
+    edit: "buttonEdit",
   },
 ]);
 </script>
