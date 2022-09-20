@@ -60,7 +60,7 @@ group {name pull put}
         @end="onEnd"
       >
         <template #item="{ element }">
-          <div class="item move">
+          <div class="item move" @click="handleEditComp(element.edit)">
             <div style="color: blue" class="move">{{ element.name }}</div>
             <component :is="currentComp[element.comp]" />
           </div>
@@ -68,7 +68,9 @@ group {name pull put}
       </draggable>
     </div>
     <!-- 右边 编辑组件 -->
-    <div class="right">333</div>
+    <div class="right">
+      <component :is="editComp[editIndex]" />
+    </div>
   </div>
 </template>
 
@@ -76,12 +78,20 @@ group {name pull put}
 import {
   defineAsyncComponent,
   markRaw,
-  shallowRef,
+  // shallowRef,
   ref,
   reactive,
-  watch,
+  // watch,
 } from "vue";
 import draggable from "vuedraggable";
+
+const editIndex = ref();
+// 右边编辑
+const editComp = reactive({
+  inputEdit: markRaw(
+    defineAsyncComponent(() => import("./editComponents/inputEdit.vue"))
+  ),
+});
 
 const currentComp = reactive({
   inputPart: markRaw(
@@ -92,6 +102,9 @@ const currentComp = reactive({
   ),
   buttonPart: markRaw(
     defineAsyncComponent(() => import("./components/buttonPart.vue"))
+  ),
+  radioPart: markRaw(
+    defineAsyncComponent(() => import("./components/radioPart.vue"))
   ),
 });
 //拖拽开始的事件
@@ -109,6 +122,14 @@ const handleMove = (e) => {
   currentComp.value = curr;
 };
 
+// 编辑中间画布的组件
+const handleEditComp = (e) => {
+  // let curr = "editComp";
+  // editComp.value = curr;
+  console.log("sdfasdf     ", e);
+  editIndex.value = e;
+};
+
 var arr2 = reactive([
   {
     id: 11,
@@ -121,24 +142,25 @@ var arr2 = reactive([
 var controlList = reactive([
   {
     id: 1,
-    name: "单选题",
+    name: "单选",
     type: "radio",
     icon: "ios-radio-button-off",
-    comp: "inputPart",
+    comp: "radioPart",
   },
   {
     id: 2,
-    name: "多选题",
+    name: "下拉框",
     type: "checkbox",
     icon: "ios-checkbox-outline",
-    comp: "inputPart",
+    comp: "selectPart",
   },
   {
     id: 3,
-    name: "填空题",
+    name: "输入框",
     type: "text",
     icon: "ios-create-outline",
-    comp: "selectPart",
+    comp: "inputPart",
+    edit: "inputEdit",
   },
   {
     id: 4,
