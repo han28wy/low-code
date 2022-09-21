@@ -1,13 +1,13 @@
 <template>
-  <el-form ref="formRef" :model="dynamicValidateForm" class="demo-dynamic">
-    <el-form-item prop="email" label="标题">
-      <el-input v-model="dynamicValidateForm.email" />
+  <el-form ref="formRef" :model="config" class="demo-dynamic">
+    <el-form-item prop="name" label="标题">
+      <el-input v-model="config.name" />
     </el-form-item>
-    <el-form-item prop="email" label="输入提示语">
-      <el-input v-model="dynamicValidateForm.placeholder" />
+    <el-form-item prop="placeholder" label="输入提示语">
+      <el-input v-model="config.placeholder" />
     </el-form-item>
-    <el-form-item
-      v-for="(domain, index) in dynamicValidateForm.domains"
+    <!-- <el-form-item
+      v-for="(domain, index) in config.domains"
       :key="domain.key"
       :label="'Domain' + index"
       :prop="'domains.' + index + '.value'"
@@ -21,7 +21,7 @@
       <el-button class="mt-2" @click.prevent="removeDomain(domain)"
         >删除</el-button
       >
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item>
       <el-button @click="addDomain">新增输入栏</el-button>
       <el-button @click="resetForm(formRef)">Reset</el-button>
@@ -33,22 +33,18 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive, watch, defineEmits, defineExpose, ref } from "vue";
 import type { FormInstance } from "element-plus";
 
+const emit = defineEmits(["setConfig"]);
 const formRef = ref<FormInstance>();
-const dynamicValidateForm = reactive<{
-  domains: DomainItem[];
-  email: string;
+const config = reactive<{
+  refName: string;
+  name: string;
   placeholder: string;
 }>({
-  domains: [
-    {
-      key: 1,
-      value: "",
-    },
-  ],
-  email: "",
+  refName: "input",
+  name: "",
   placeholder: "",
 });
 
@@ -58,14 +54,14 @@ interface DomainItem {
 }
 
 const removeDomain = (item: DomainItem) => {
-  const index = dynamicValidateForm.domains.indexOf(item);
+  const index = config.domains.indexOf(item);
   if (index !== -1) {
-    dynamicValidateForm.domains.splice(index, 1);
+    config.domains.splice(index, 1);
   }
 };
 
 const addDomain = () => {
-  dynamicValidateForm.domains.push({
+  config.domains.push({
     key: Date.now(),
     value: "",
   });
@@ -87,6 +83,12 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
 };
+const handleReset = (val) => {
+  emit("setConfig", val);
+};
+watch(config, (newValue) => {
+  handleReset(newValue);
+});
 </script>
 
 <style scoped>

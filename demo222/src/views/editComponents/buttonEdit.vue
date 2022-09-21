@@ -19,10 +19,12 @@ import type { FormInstance } from "element-plus";
 const emit = defineEmits(["setConfig"]);
 const formRef = ref<FormInstance>();
 const config = reactive<{
+  refName: string;
   name: string;
   placeholder: string;
   color: string;
 }>({
+  refName: "button",
   name: "",
   placeholder: "",
   color: "#409EFF",

@@ -63,7 +63,7 @@ group {name pull put}
           <div class="item move" @click="handleEditComp(element.edit)">
             <div style="color: blue" class="move">{{ element.name }}</div>
             <component
-              ref="midRef"
+              :ref="element.type"
               :is="currentComp[element.comp]"
               :config="componentConfig"
             />
@@ -90,12 +90,18 @@ import {
 import draggable from "vuedraggable";
 var componentConfig = reactive();
 
+const button = ref();
+const input = ref();
+
+// 给中间画布的组件重新设置参数
 const setConfig = (e) => {
   componentConfig = e;
-  midRef.value.resetData(componentConfig);
+  if (componentConfig.refName == "button") {
+    button.value.resetData(componentConfig);
+  } else if (componentConfig.refName == "input") {
+    input.value.resetData(componentConfig);
+  }
 };
-
-const midRef = ref();
 
 const editIndex = ref();
 // 右边编辑
@@ -174,7 +180,7 @@ var controlList = reactive([
   {
     id: 3,
     name: "输入框",
-    type: "text",
+    type: "input",
     icon: "ios-create-outline",
     comp: "inputPart",
     edit: "inputEdit",
@@ -215,7 +221,7 @@ var controlList = reactive([
   {
     id: 11,
     name: "按钮",
-    type: "position",
+    type: "button",
     icon: "ios-pin-outline",
     comp: "buttonPart",
     edit: "buttonEdit",
