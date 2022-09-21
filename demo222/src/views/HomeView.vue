@@ -62,14 +62,18 @@ group {name pull put}
         <template #item="{ element }">
           <div class="item move" @click="handleEditComp(element.edit)">
             <div style="color: blue" class="move">{{ element.name }}</div>
-            <component :is="currentComp[element.comp]" />
+            <component
+              ref="midRef"
+              :is="currentComp[element.comp]"
+              :config="componentConfig"
+            />
           </div>
         </template>
       </draggable>
     </div>
     <!-- 右边 编辑组件 -->
     <div class="right">
-      <component :is="editComp[editIndex]" />
+      <component :is="editComp[editIndex]" @setConfig="setConfig" />
     </div>
   </div>
 </template>
@@ -84,6 +88,14 @@ import {
   // watch,
 } from "vue";
 import draggable from "vuedraggable";
+var componentConfig = reactive();
+
+const setConfig = (e) => {
+  componentConfig = e;
+  midRef.value.resetData(componentConfig);
+};
+
+const midRef = ref();
 
 const editIndex = ref();
 // 右边编辑
@@ -129,7 +141,6 @@ const handleMove = (e) => {
 const handleEditComp = (e) => {
   // let curr = "editComp";
   // editComp.value = curr;
-  console.log("sdfasdf     ", e);
   editIndex.value = e;
 };
 
