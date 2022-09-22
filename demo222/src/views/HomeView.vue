@@ -60,7 +60,7 @@ group {name pull put}
         @end="onEnd"
       >
         <template #item="{ element }">
-          <div class="item move" @click="handleEditComp(element.edit)">
+          <div class="item move" @click="handleEditComp(element)">
             <div style="color: blue" class="move">{{ element.name }}</div>
             <component
               :ref="element.type"
@@ -73,16 +73,20 @@ group {name pull put}
     </div>
     <!-- 右边 编辑组件 -->
     <div class="right">
-      <component :is="editComp[editIndex]" @setConfig="setConfig" />
+      <component
+        :is="editComp[editIndex]"
+        :editableConfig="editableConfig"
+        @setConfig="setConfig"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
+import getConfig from "./editGroup.ts";
 import {
   defineAsyncComponent,
   markRaw,
-  // shallowRef,
   ref,
   reactive,
   // watch,
@@ -104,6 +108,7 @@ const setConfig = (e) => {
 };
 
 const editIndex = ref();
+const editableConfig = ref();
 // 右边编辑
 const editComp = reactive({
   inputEdit: markRaw(
@@ -111,6 +116,9 @@ const editComp = reactive({
   ),
   buttonEdit: markRaw(
     defineAsyncComponent(() => import("./editComponents/buttonEdit.vue"))
+  ),
+  commonEdit: markRaw(
+    defineAsyncComponent(() => import("./editComponents/commonEdit.vue"))
   ),
 });
 
@@ -145,9 +153,8 @@ const handleMove = (e) => {
 
 // 编辑中间画布的组件
 const handleEditComp = (e) => {
-  // let curr = "editComp";
-  // editComp.value = curr;
-  editIndex.value = e;
+  editIndex.value = e.edit; // 展示编辑区域对应组件，如果都从common获取就没啥必要
+  editableConfig.value = getConfig(e.type); //  获取当前组件中可被编辑的属性
 };
 
 var arr2 = reactive([
@@ -167,7 +174,7 @@ var controlList = reactive([
     type: "radio",
     icon: "ios-radio-button-off",
     comp: "radioPart",
-    edit: "buttonEdit",
+    edit: "commonEdit",
   },
   {
     id: 2,
@@ -224,7 +231,7 @@ var controlList = reactive([
     type: "button",
     icon: "ios-pin-outline",
     comp: "buttonPart",
-    edit: "buttonEdit",
+    edit: "commonEdit",
   },
 ]);
 </script>

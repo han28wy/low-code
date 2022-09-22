@@ -1,12 +1,16 @@
 <template>
   <el-form ref="formRef" :model="config" class="demo-dynamic">
-    <el-form-item prop="name" label="标题">
+    <el-form-item v-show="editableConfig.name" prop="name" label="标题">
       <el-input v-model="config.name" />
     </el-form-item>
-    <el-form-item prop="placeholder" label="提示语">
+    <el-form-item
+      v-show="editableConfig.placeholder"
+      prop="placeholder"
+      label="提示语"
+    >
       <el-input v-model="config.placeholder" />
     </el-form-item>
-    <el-form-item prop="color" label="颜色">
+    <el-form-item v-show="editableConfig.color" prop="color" label="颜色">
       <el-color-picker v-model="config.color" />
     </el-form-item>
     <el-form-item>
@@ -16,8 +20,9 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch, defineEmits } from "vue";
+import { reactive, ref, watch, defineEmits, defineProps } from "vue";
 import type { FormInstance } from "element-plus";
+const props = defineProps(["editableConfig"]);
 
 const emit = defineEmits(["setConfig"]);
 const formRef = ref<FormInstance>();
@@ -33,41 +38,10 @@ const config = reactive<{
   color: "#409EFF",
 });
 
-// interface DomainItem {
-//   key: number;
-//   value: string;
-// }
-
-// const removeDomain = (item: DomainItem) => {
-//   const index = config.domains.indexOf(item);
-//   if (index !== -1) {
-//     config.domains.splice(index, 1);
-//   }
-// };
-
-// const addDomain = () => {
-//   config.domains.push({
-//     key: Date.now(),
-//     value: "",
-//   });
-// };
-
 const submitForm = (formEl: FormInstance | undefined) => {
-  //   if (!formEl) return;
-  //   formEl.validate((valid) => {
-  //     if (valid) {
-  //       console.log("submit!      ", formEl, "     ", formEl.value);
-  //     } else {
-  //       console.log("error submit!");
-  //       return false;
-  //     }
-  //   });
+  console.log("提交  ", props.editableConfig);
 };
 
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  formEl.resetFields();
-};
 const handleReset = (val) => {
   console.log("我在handleReset");
   emit("setConfig", val);
